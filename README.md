@@ -59,8 +59,8 @@
 需要 Node.js 18+ 和一条命令：
 
 ```bash
-git clone https://github.com/<your-name>/leon-video-studio.git
-cd leon-video-studio
+git clone https://github.com/leonzhong2468/Look.git
+cd Look
 npm install          # 只装 electron 一个开发依赖
 npm start
 ```
