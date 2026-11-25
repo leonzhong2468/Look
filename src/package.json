@@ -1,0 +1,15 @@
+{
+  "name": "look",
+  "productName": "Look",
+  "version": "1.0.0",
+  "description": "本地 AI 视频工作台：电商产品图 → 白底主图 → 8 镜带货片；也支持文生图 / 文生视频 / 参考生图 / 参考生视频。多账号、多平台并行，全部跑在本机。",
+  "main": "main.js",
+  "author": "Leon",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^43.4.1"
+  }
+}

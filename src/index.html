@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' file: data: blob:; media-src 'self' file: data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'">
+<title>Look · 视频生成 + AI 多开</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="dark">
+
+<!-- ============ 图标精灵 ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m20 6-11 11-5-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m6 3 14 9-14 9V3Z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+    <symbol id="i-video" viewBox="0 0 24 24"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="m17 10 5-3v10l-5-3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5M12 3v12"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13 2 3 14h8l-1 8 11-13h-8l1-7Z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 4 2c-.9.7-1.5 1.2-1.5 2.5M12 17h.01"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="m12 2 1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2ZM19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5M12 15V3"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M3 4h18v16H3z"/><path d="m10 8 6 4-6 4V8Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-9.5A4.5 4.5 0 0 1 12 8a4.5 4.5 0 0 1 7 3.5C19 16.6 12 21 12 21Z"/></symbol>
+    <symbol id="i-coffee" viewBox="0 0 24 24"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 9h2a2.5 2.5 0 0 1 0 5h-2"/><path d="M6 3v2M10 3v2M14 3v2"/></symbol>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+    <symbol id="i-clip" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 12h18"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></symbol>
+  </defs>
+</svg>
+
+<div class="app">
+
+  <!-- ============ 顶栏 ============ -->
+  <header class="topbar">
+    <div class="tb-left">
+      <div class="brand">
+        <span class="brand-mark"><svg><use href="#i-bolt"/></svg></span>
+        <span class="brand-name">Look</span><span class="brand-sub">视频生成 · AI 多开</span>
+        <span class="brand-badge" id="appVersion">v1.0</span>
+      </div>
+    </div>
+
+    <div class="tb-center">
+      <div class="searchbox">
+        <svg><use href="#i-search"/></svg>
+        <input id="globalSearch" type="text" placeholder="搜索任务 / 商品 / 账号…" spellcheck="false">
+      </div>
+    </div>
+
+    <div class="tb-right">
+      <div class="live-status" id="liveStatus" title="正在运行的流水线">
+        <span class="live-dot"></span>
+        <span><b id="liveCount">0</b> 条运行中</span>
+      </div>
+      <button class="tbtn" id="btnTogglePage" title="显示 / 隐藏 AI 页面">
+        <svg><use href="#i-eye"/></svg><span id="togglePageTxt">看页面</span>
+      </button>
+      <button class="icon-btn" id="btnTheme" title="切换深浅色"><svg><use href="#i-moon"/></svg></button>
+      <div class="avatar-me" id="avatarMe" title="Leon">L</div>
+    </div>
+  </header>
+
+  <div class="work">
+
+    <!-- ============ 左侧图标导航 ============ -->
+    <nav class="rail">
+      <div class="rail-group">
+        <button class="rail-item active" data-view="board" data-tip="工作台"><svg><use href="#i-grid"/></svg></button>
+        <button class="rail-item" data-view="accounts" data-tip="账号矩阵"><svg><use href="#i-users"/></svg><i class="rail-count" id="railAccCount">0</i></button>
+        <button class="rail-item" data-view="platforms" data-tip="AI 平台"><svg><use href="#i-layers"/></svg></button>
+        <button class="rail-item" data-view="outputs" data-tip="产出库"><svg><use href="#i-folder"/></svg></button>
+      </div>
+      <div class="rail-group rail-bottom">
+        <button class="rail-item" data-view="settings" data-tip="设置"><svg><use href="#i-settings"/></svg></button>
+        <button class="rail-item" data-view="about" data-tip="关于"><svg><use href="#i-heart"/></svg></button>
+      </div>
+    </nav>
+
+    <!-- ============ 列表面板 ============ -->
+    <aside class="panel">
+      <div class="panel-head">
+        <div class="ph-title">
+          <h2 id="panelTitle">任务</h2>
+          <span class="ph-sub" id="panelSub">TASKS</span>
+        </div>
+        <button class="icon-btn sm" id="btnPanelAction" title="新建任务"><svg><use href="#i-plus"/></svg></button>
+      </div>
+
+      <!-- 正在看账号页面时的返回入口：放面板最上面，整行大按钮，不用去右上角找 -->
+      <div class="back-bar" id="backBar">
+        <button class="back-btn" id="btnBackBoard">
+          <svg><use href="#i-grid"/></svg>
+          <span id="btnBackBoardTxt">返回账号</span>
+        </button>
+        <div class="back-hint" id="backHint">正在看账号页面 · 再点一次当前账号也能回来</div>
+      </div>
+
+      <div class="panel-body" id="panelBody"></div>
+
+      <div class="panel-foot">
+        <div class="foot-row">
+          <span>Look</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ============ 主舞台 ============ -->
+    <main class="stage" id="stage">
+      <div class="stage-scroll" id="stageScroll">
+
+        <section class="view" id="viewBoardEmpty">
+          <div class="hero">
+            <div class="hero-mark"><svg><use href="#i-bolt"/></svg></div>
+            <h1>一张图，一条能投的片子</h1>
+            <p>左侧「新建任务」拖入产品图，或者直接写一段画面描述。<b>电商视频</b>走完整流水线，<b>其他视频</b>把创作要求原样交给 AI。</p>
+            <div class="hero-actions">
+              <button class="btn primary" id="btnHeroNew"><svg><use href="#i-plus"/></svg>新建任务</button>
+              <button class="btn ghost" id="btnHeroAccounts"><svg><use href="#i-users"/></svg>先登录账号</button>
+            </div>
+            <div class="hero-stats" id="heroStats"></div>
+          </div>
+          <div class="feature-grid">
+            <div class="feature">
+              <span class="f-ico"><svg><use href="#i-sparkle"/></svg></span>
+              <b>按商品现编场景</b>
+              <p>14 种视频形态 + 自由构想：泳装去海边、围裙进厨房、台灯留在深夜工位。</p>
+            </div>
+            <div class="feature">
+              <span class="f-ico"><svg><use href="#i-users"/></svg></span>
+              <b>多账号并行</b>
+              <p>一个账号一条流水线，号够多就同时跑，互不打扰，额度用完自动换号。</p>
+            </div>
+            <div class="feature">
+              <span class="f-ico"><svg><use href="#i-layers"/></svg></span>
+              <b>不只豆包</b>
+              <p>内置豆包深度适配，也能把任何能网页登录的 AI 加成多开平台。</p>
+            </div>
+            <div class="feature">
+              <span class="f-ico"><svg><use href="#i-shield"/></svg></span>
+              <b>本机运行</b>
+              <p>不经过任何中转服务器，登录态、提示词、成片全部留在你自己的电脑上。</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="view hidden" id="viewTask"></section>
+        <section class="view hidden" id="viewAccounts"></section>
+        <section class="view hidden" id="viewPlatforms"></section>
+        <section class="view hidden" id="viewOutputs"></section>
+        <section class="view hidden" id="viewSettings"></section>
+        <section class="view hidden" id="viewAbout"></section>
+
+        <div class="live-placeholder" id="livePlaceholder">
+          <div class="lp-inner">
+            <svg><use href="#i-eye"/></svg>
+            <b>AI 页面在右侧显示</b>
+            <p>从左侧选一个账号即可打开；点顶栏「看页面 / 返回看板」切换。</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ============ 新建任务 ============ -->
+<div class="mask hidden" id="maskCreate">
+  <div class="modal wide">
+    <div class="modal-head">
+      <div class="mh-left">
+        <b>新建任务</b>
+        <span class="mh-sub" id="createSub">NEW TASK</span>
+      </div>
+      <button class="icon-btn sm" id="btnCloseCreate"><svg><use href="#i-x"/></svg></button>
+    </div>
+
+    <div class="modeswitch" id="modeSwitch">
+      <button class="ms-item active" data-mode="ecom">
+        <svg><use href="#i-image"/></svg>
+        <span><b>电商视频</b><i>产品图 → 白底图 → 分镜带货片</i></span>
+      </button>
+      <button class="ms-item" data-mode="other">
+        <svg><use href="#i-sparkle"/></svg>
+        <span><b>其他视频</b><i>文生图 / 文生视频 / 参考生图 / 参考生视频</i></span>
+      </button>
+    </div>
+
+    <div class="modal-body" id="createBody">
+
+      <div class="pane" id="paneEcom">
+        <div class="drop" id="dropEcom">
+          <svg class="drop-ico"><use href="#i-upload"/></svg>
+          <div class="drop-main">把产品图拖到这里，或点击选择</div>
+          <div class="drop-sub">支持 png / jpg / webp，可多张</div>
+          <div class="thumbs" id="thumbs"></div>
+        </div>
+
+        <div class="grid2">
+          <label class="field">商品名 <span class="req">*</span>
+            <input id="fName" placeholder="例：316 不锈钢保温杯">
+          </label>
+          <label class="field">品类（决定场景与动作）
+            <input id="fCategory" placeholder="例：保温杯 / 蓝牙耳机 / 连衣裙">
+          </label>
+        </div>
+        <div class="grid2">
+          <label class="field">目标人群
+            <input id="fAudience" placeholder="例：通勤白领、学生党">
+          </label>
+          <label class="field">视频时长
+            <select id="fDuration">
+              <option value="15" selected>15 秒 · 8 镜（推荐）</option>
+              <option value="10">10 秒 · 6 镜</option>
+              <option value="5">5 秒 · 4 镜极速版</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">卖点（只体现在画面里，不出现文字）
+          <textarea id="fSelling" rows="2" placeholder="例：单手开盖、24 小时保温、杯口不挂唇"></textarea>
+        </label>
+        <div class="grid2">
+          <label class="field">场景（留空自动匹配）
+            <input id="fScene" placeholder="例：原木桌面 + 窗边自然光">
+          </label>
+          <label class="field">必须保留的本体文字
+            <input id="fLogo" placeholder="例：杯身 LOGO 与型号字样">
+          </label>
+        </div>
+        <label class="field">补充要求（可留空）
+          <input id="fExtra" placeholder="例：不要出现人脸；末尾定格久一点">
+        </label>
+        <div class="grid2">
+          <label class="field">视频形态
+            <select id="fFormat">
+              <option value="" selected>自动匹配 · 按商品和卖点挑最合适的</option>
+              <option value="free">AI 自由构想 · 按商品现编一段真实生活</option>
+              <option value="street">街拍漫游</option>
+              <option value="pov">第一人称实拍</option>
+              <option value="ugc">手持实测</option>
+              <option value="skit">情景段子</option>
+              <option value="interview">街头采访</option>
+              <option value="ootd">穿搭型录</option>
+              <option value="food">美食 ASMR</option>
+              <option value="test">硬核实测</option>
+              <option value="beforeafter">前后对比</option>
+              <option value="roomtour">居家漫游</option>
+              <option value="cinematic">电影感广告</option>
+              <option value="pet">萌宠主角</option>
+              <option value="travel">旅拍场景</option>
+              <option value="tutorial">教程三步</option>
+            </select>
+          </label>
+          <label class="field">提示词来源
+            <select id="fPromptMode">
+              <option value="local" selected>本地模板 · 立刻生成，稳定</option>
+              <option value="doubao">AI 代写 · 先让 AI 写一版再出片</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="pane hidden" id="paneOther">
+        <div class="kindgrid" id="kindGrid">
+          <button class="kind active" data-kind="t2v"><svg><use href="#i-video"/></svg><b>文生视频</b><i>只给文字，出成片</i></button>
+          <button class="kind" data-kind="t2i"><svg><use href="#i-image"/></svg><b>文生图</b><i>只给文字，出图片</i></button>
+          <button class="kind" data-kind="i2v"><svg><use href="#i-play"/></svg><b>参考生视频</b><i>给图 + 文字，图动起来</i></button>
+          <button class="kind" data-kind="i2i"><svg><use href="#i-clip"/></svg><b>参考生图</b><i>给图 + 文字，仿一张新图</i></button>
+        </div>
+
+        <div class="drop compact" id="dropOther">
+          <svg class="drop-ico"><use href="#i-upload"/></svg>
+          <div class="drop-main"><span id="refDropTitle">拖入参考图（可选）</span></div>
+          <div class="drop-sub" id="refDropSub">不传也能做：纯文字出片</div>
+          <div class="thumbs" id="thumbsOther"></div>
+        </div>
+
+        <label class="field">画面描述 <span class="req">*</span>
+          <textarea id="fPrompt" rows="6" placeholder="例：傍晚的老街，一个穿米色风衣的女生边走边回头，霓虹招牌在雨后地面反光；手持跟拍，浅景深，胶片颗粒。&#10;&#10;可以直接写场景、人物、镜头、光线、情绪，越具体越准。"></textarea>
+        </label>
+        <div class="grid2">
+          <label class="field">画幅
+            <select id="fRatio">
+              <option value="9:16" selected>竖屏 9:16 · 短视频</option>
+              <option value="16:9">横屏 16:9 · 影视感</option>
+              <option value="1:1">方形 1:1</option>
+            </select>
+          </label>
+          <label class="field">时长（仅视频）
+            <select id="fOtherDuration">
+              <option value="5">5 秒</option>
+              <option value="10" selected>10 秒</option>
+              <option value="15">15 秒</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">补充要求（可留空）
+          <input id="fOtherExtra" placeholder="例：不要出现文字；结尾定格；整体冷色调">
+        </label>
+        <div class="ck-box">
+          <label class="ck"><input type="checkbox" id="fExpand" checked><span>按 Seedance 规范补全镜头结构（推荐）</span></label>
+          <p class="hint" style="margin:6px 0 0">只写一句也能出片：会按 8 拍镜头结构 + 约束条件补全，主体与主题仍以你写的为准；不想补全就取消勾选。</p>
+        </div>
+      </div>
+
+      <div class="ck-group" id="ckGroup">
+        <label class="ck"><input type="checkbox" id="fNoText" checked><span>不出现字幕</span></label>
+        <label class="ck"><input type="checkbox" id="fNoVoice" checked><span>不出现台词</span></label>
+        <label class="ck"><input type="checkbox" id="fNoAmbient"><span>连背景人声也不要</span></label>
+      </div>
+      <div class="hint" id="ckHint">默认保留真实背景人声（街上有人说话、店里有顾客），但听不清内容；想彻底静音就勾第三项。</div>
+    </div>
+
+    <div class="modal-foot">
+      <div class="foot-hint" id="createHint">创建后会立即开始；中途可随时取消，页面留在你手上。</div>
+      <div class="foot-btns">
+        <button class="btn ghost" id="btnCancelCreate">取消</button>
+        <button class="btn primary" id="btnCreate">创建并开始</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 通用弹层 ============ -->
+<div class="mask hidden" id="maskDialog">
+  <div class="modal" id="dialogBox">
+    <div class="modal-head">
+      <div class="mh-left"><b id="dlgTitle">提示</b><span class="mh-sub" id="dlgSub"></span></div>
+      <button class="icon-btn sm" id="btnCloseDialog"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <div class="modal-body" id="dlgBody"></div>
+    <div class="modal-foot">
+      <div class="foot-hint" id="dlgHint"></div>
+      <div class="foot-btns" id="dlgBtns"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="renderer.js"></script>
+<script src="task-ui.js"></script>
+</body>
+</html>
