@@ -41,7 +41,7 @@
 
 ## 快速开始（普通用户）
 
-1. 到 [Releases](../../releases) 下载最新版 `Look-v1.0.0.zip`
+1. 到 [Releases](../../releases) 下载最新版 `Look-portable-20261125.zip`
 2. **完整解压**到一个可写目录（例如 `D:\Look\`）
    - ⚠️ 不要在压缩包里直接双击
    - ⚠️ 不要放到 `C:\Program Files\`
